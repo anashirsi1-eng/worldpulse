@@ -16,7 +16,8 @@ const activeFilters = {
   earthquakes: true,
   wildfires: true,
   storms: true,
-  volcanoes: true
+  volcanoes: true,
+  news: true
 };
 
 function clearMarkers() {
@@ -43,7 +44,11 @@ function createMarker(
 
   marker.bindPopup(`
     <div style="min-width:240px; color:white;">
-      <h2 style="color:${color}; margin-bottom:10px;">
+
+      <h2 style="
+        color:${color};
+        margin-bottom:10px;
+      ">
         ${title}
       </h2>
 
@@ -55,6 +60,7 @@ function createMarker(
         <strong>Severity:</strong>
         ${severity}
       </div>
+
     </div>
   `);
 
@@ -66,7 +72,7 @@ async function loadEarthquakes() {
   if (!activeFilters.earthquakes) return;
 
   const response = await fetch(
-    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_week.geojson'
+    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson'
   );
 
   const data = await response.json();
@@ -82,7 +88,7 @@ async function loadEarthquakes() {
     const lat = coords[1];
     const lon = coords[0];
 
-    let size = 12;
+    let size = 10;
 
     if (magnitude >= 7) {
       size = 34;
@@ -93,7 +99,7 @@ async function loadEarthquakes() {
     }
 
     else if (magnitude >= 5) {
-      size = 18;
+      size = 16;
     }
 
     createMarker(
@@ -144,27 +150,26 @@ async function loadEONETEvents() {
       category === 'Wildfires' &&
       activeFilters.wildfires &&
       wildfireCount < 15
-       ) {
+    ) {
 
-  // random skip so it doesn't carpet bomb
-  if (Math.random() > 0.15) return;
+      if (Math.random() > 0.15) return;
 
-  wildfireCount++;
+      wildfireCount++;
 
-  createMarker(
-    lat,
-    lon,
-    4,
-    '#ff9800',
-    'Wildfire',
-    `
-    ${event.title}
-    <br><br>
-    Active wildfire zone detected
-    `,
-    'Moderate'
-  );
-}
+      createMarker(
+        lat,
+        lon,
+        4,
+        '#ff9800',
+        'Wildfire',
+        `
+        ${event.title}
+        <br><br>
+        Active wildfire zone detected
+        `,
+        'Moderate'
+      );
+    }
 
     // STORMS
     if (
@@ -184,7 +189,7 @@ async function loadEONETEvents() {
         `
         ${event.title}
         <br><br>
-        Major storm activity detected
+        Severe weather activity detected
         `,
         'High'
       );
@@ -194,7 +199,7 @@ async function loadEONETEvents() {
     if (
       category === 'Volcanoes' &&
       activeFilters.volcanoes &&
-      volcanoCount < 12
+      volcanoCount < 10
     ) {
 
       volcanoCount++;
@@ -218,6 +223,55 @@ async function loadEONETEvents() {
 
 }
 
+async function loadGDELTNews() {
+
+  if (!activeFilters.news) return;
+
+  try {
+
+    const response = await fetch(
+      'https://api.gdeltproject.org/api/v2/doc/doc?query=earthquake OR war OR wildfire OR hurricane&mode=artlist&maxrecords=20&format=json'
+    );
+
+    const data = await response.json();
+
+    if (!data.articles) return;
+
+    data.articles.forEach(article => {
+
+      if (!article.sourceCountry) return;
+
+      const randomLat =
+        (Math.random() * 140) - 70;
+
+      const randomLon =
+        (Math.random() * 360) - 180;
+
+      createMarker(
+        randomLat,
+        randomLon,
+        6,
+        '#00d4ff',
+        'Breaking News',
+        `
+        <strong>${article.title}</strong>
+        <br><br>
+        Source:
+        ${article.domain}
+        `,
+        'Breaking'
+      );
+
+    });
+
+  }
+
+  catch (err) {
+    console.log('GDELT failed', err);
+  }
+
+}
+
 async function loadEverything() {
 
   clearMarkers();
@@ -225,6 +279,8 @@ async function loadEverything() {
   await loadEarthquakes();
 
   await loadEONETEvents();
+
+  await loadGDELTNews();
 
 }
 
