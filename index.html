@@ -1,4 +1,34 @@
 <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Live Crisis Radar</title>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css"
+  />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div class="topbar">
+
+    <div>
+      <h1>LIVE CRISIS RADAR</h1>
+      <p>Global Real-Time Crisis Intelligence</p>
+    </div>
+
+    <div class="live-pill">
+      <span class="dot"></span>
+      LIVE
+    </div>
+
   </div>
 
   <div class="filters">
@@ -65,12 +95,19 @@
 
     </div>
 
-    <div class="ad-box">
-      Ad Space
-      <br><br>
-      Google AdSense Later
-    </div>
+  </div>
 
+  <div class="legend">
+    <div>🔴 Earthquakes</div>
+    <div>🟠 Wildfires</div>
+    <div>🟣 Hurricanes</div>
+    <div>⚫ Wars</div>
+  </div>
+
+  <div class="news-ticker">
+    <div class="news-scroll">
+      LIVE ALERTS • Earthquake activity detected • Conflict escalation reported • Hurricane system forming • Wildfire evacuations underway •
+    </div>
   </div>
 
   <div id="map"></div>
