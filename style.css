@@ -442,3 +442,16 @@ body {
     font-size: 11px;
   }
 
+  .news-card {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0, 212, 255, 0.18),
+      rgba(0, 120, 255, 0.08)
+    );
+
+  border:
+    1px solid
+    rgba(0, 212, 255, 0.25);
+}
+
