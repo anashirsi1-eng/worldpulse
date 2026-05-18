@@ -396,6 +396,32 @@ body {
 }
 
 .page-container {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 40px 20px;
+
+  background:
+    radial-gradient(circle at top, rgba(255,0,80,0.08), transparent 40%),
+    #05070d;
+}
+
+.page-card {
+  width: 100%;
+  max-width: 900px;
+
+  padding: 40px;
+
+  border-radius: 28px;
+
+  background: rgba(8,10,18,0.85);
+
+  border: 1px solid rgba(255,255,255,0.08);
+
   backdrop-filter: blur(18px);
 
   color: white;
