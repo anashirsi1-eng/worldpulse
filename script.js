@@ -42,8 +42,7 @@ function createMarker(
   });
 
   marker.bindPopup(`
-    <div style="min-width:240px;">
-
+    <div style="min-width:240px; color:white;">
       <h2 style="color:${color}; margin-bottom:10px;">
         ${title}
       </h2>
@@ -56,7 +55,6 @@ function createMarker(
         <strong>Severity:</strong>
         ${severity}
       </div>
-
     </div>
   `);
 
@@ -84,18 +82,18 @@ async function loadEarthquakes() {
     const lat = coords[1];
     const lon = coords[0];
 
-    let size = 10;
+    let size = 12;
 
     if (magnitude >= 7) {
-      size = 28;
+      size = 34;
     }
 
     else if (magnitude >= 6) {
-      size = 20;
+      size = 24;
     }
 
-    else {
-      size = 14;
+    else if (magnitude >= 5) {
+      size = 18;
     }
 
     createMarker(
@@ -104,7 +102,11 @@ async function loadEarthquakes() {
       size,
       '#ff3355',
       'Earthquake',
-      `${quake.properties.place}<br><br>Magnitude: ${magnitude}`,
+      `
+      ${quake.properties.place}
+      <br><br>
+      Magnitude: ${magnitude}
+      `,
       magnitude >= 7 ? 'Extreme' : 'High'
     );
 
@@ -120,6 +122,10 @@ async function loadEONETEvents() {
 
   const data = await response.json();
 
+  let wildfireCount = 0;
+  let stormCount = 0;
+  let volcanoCount = 0;
+
   data.events.forEach(event => {
 
     if (!event.geometry || !event.geometry.length) return;
@@ -133,55 +139,76 @@ async function loadEONETEvents() {
 
     const category = event.categories[0].title;
 
+    // WILDFIRES
     if (
       category === 'Wildfires' &&
-      activeFilters.wildfires
+      activeFilters.wildfires &&
+      wildfireCount < 35
     ) {
+
+      wildfireCount++;
 
       createMarker(
         lat,
         lon,
-        10,
-        '#ff8800',
+        5,
+        '#ff9800',
         'Wildfire',
-        event.title,
-        'High'
+        `
+        ${event.title}
+        <br><br>
+        Active wildfire zone detected
+        `,
+        'Moderate'
       );
-
     }
 
+    // STORMS
     if (
       category === 'Severe Storms' &&
-      activeFilters.storms
+      activeFilters.storms &&
+      stormCount < 15
     ) {
 
-      createMarker(
-        lat,
-        lon,
-        16,
-        '#8b5cf6',
-        'Storm System',
-        event.title,
-        'Extreme'
-      );
-
-    }
-
-    if (
-      category === 'Volcanoes' &&
-      activeFilters.volcanoes
-    ) {
+      stormCount++;
 
       createMarker(
         lat,
         lon,
         12,
-        '#5b0000',
-        'Volcano',
-        event.title,
+        '#9b6dff',
+        'Storm System',
+        `
+        ${event.title}
+        <br><br>
+        Major storm activity detected
+        `,
         'High'
       );
+    }
 
+    // VOLCANOES
+    if (
+      category === 'Volcanoes' &&
+      activeFilters.volcanoes &&
+      volcanoCount < 12
+    ) {
+
+      volcanoCount++;
+
+      createMarker(
+        lat,
+        lon,
+        10,
+        '#700000',
+        'Volcanic Activity',
+        `
+        ${event.title}
+        <br><br>
+        Elevated volcanic activity
+        `,
+        'High'
+      );
     }
 
   });
@@ -198,10 +225,6 @@ async function loadEverything() {
 
 }
 
-loadEverything();
-
-setInterval(loadEverything, 300000);
-
 window.toggleFilter = function(type) {
 
   activeFilters[type] = !activeFilters[type];
@@ -209,3 +232,7 @@ window.toggleFilter = function(type) {
   loadEverything();
 
 };
+
+loadEverything();
+
+setInterval(loadEverything, 300000);
