@@ -62,4 +62,170 @@ async function loadEarthquakes() {
 
     if (!magnitude || magnitude < 4.5) return;
 
+    const coords = quake.geometry.coordinates;
+
+    const lat = coords[1];
+    const lon = coords[0];
+
+    let size = 10;
+
+    if (magnitude >= 7) {
+      size = 28;
+    } else if (magnitude >= 6) {
+      size = 20;
+    } else if (magnitude >= 5) {
+      size = 15;
+    }
+
+    createMarker(
+      lat,
+      lon,
+      size,
+      '#ff3355',
+      'Earthquake',
+      `${quake.properties.place}<br><br>Magnitude: ${magnitude}`
+    );
+
+  });
+
+}
+
+function loadWars() {
+
+  if (!activeFilters.wars) return;
+
+  const wars = [
+
+    {
+      lat: 49.0,
+      lon: 32.0,
+      size: 20,
+      title: 'Ukraine Conflict',
+      info: 'Large-scale active war zone.'
+    },
+
+    {
+      lat: 31.5,
+      lon: 34.5,
+      size: 16,
+      title: 'Israel-Gaza Conflict',
+      info: 'Heavy military activity reported.'
+    },
+
+    {
+      lat: 15.5,
+      lon: 32.5,
+      size: 14,
+      title: 'Sudan Crisis',
+      info: 'Humanitarian crisis and conflict.'
+    }
+
+  ];
+
+  wars.forEach(war => {
+
+    createMarker(
+      war.lat,
+      war.lon,
+      war.size,
+      '#8b0000',
+      war.title,
+      war.info
+    );
+
+  });
+
+}
+
+function loadWildfires() {
+
+  if (!activeFilters.wildfires) return;
+
+  const fires = [
+
+    {
+      lat: 34.2,
+      lon: -118.4,
+      size: 10,
+      name: 'California Wildfire'
+    },
+
+    {
+      lat: -33.8,
+      lon: 151.2,
+      size: 9,
+      name: 'Australia Bushfire'
+    }
+
+  ];
+
+  fires.forEach(fire => {
+
+    createMarker(
+      fire.lat,
+      fire.lon,
+      fire.size,
+      '#ff8800',
+      'Wildfire',
+      fire.name
+    );
+
+  });
+
+}
+
+function loadHurricanes() {
+
+  if (!activeFilters.hurricanes) return;
+
+  const storms = [
+
+    {
+      lat: 24,
+      lon: -71,
+      size: 24,
+      name: 'Atlantic Hurricane System'
+    }
+
+  ];
+
+  storms.forEach(storm => {
+
+    createMarker(
+      storm.lat,
+      storm.lon,
+      storm.size,
+      '#8b5cf6',
+      'Hurricane',
+      storm.name
+    );
+
+  });
+
+}
+
+async function loadEverything() {
+
+  clearMarkers();
+
+  await loadEarthquakes();
+
+  loadWars();
+
+  loadWildfires();
+
+  loadHurricanes();
+
+}
+
+loadEverything();
+
+setInterval(loadEverything, 300000);
+
+window.toggleFilter = function(type) {
+
+  activeFilters[type] = !activeFilters[type];
+
+  loadEverything();
+
 };
