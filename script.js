@@ -14,9 +14,9 @@ const markers = L.layerGroup().addTo(map);
 
 const activeFilters = {
   earthquakes: true,
-  wars: true,
   wildfires: true,
-  hurricanes: true
+  storms: true,
+  volcanoes: true
 };
 
 function clearMarkers() {
@@ -30,7 +30,6 @@ function createMarker(
   color,
   title,
   info,
-  casualties,
   severity
 ) {
 
@@ -43,22 +42,14 @@ function createMarker(
   });
 
   marker.bindPopup(`
-    <div style="min-width:230px;">
+    <div style="min-width:240px;">
 
-      <h2 style="
-        color:${color};
-        margin-bottom:10px;
-      ">
+      <h2 style="color:${color}; margin-bottom:10px;">
         ${title}
       </h2>
 
-      <div style="margin-bottom:12px;">
+      <div style="margin-bottom:10px;">
         ${info}
-      </div>
-
-      <div style="margin-bottom:8px;">
-        <strong>Casualties:</strong>
-        ${casualties}
       </div>
 
       <div>
@@ -68,10 +59,6 @@ function createMarker(
 
     </div>
   `);
-
-  marker.on('mouseover', function () {
-    this.openPopup();
-  });
 
   markers.addLayer(marker);
 }
@@ -90,7 +77,7 @@ async function loadEarthquakes() {
 
     const magnitude = quake.properties.mag;
 
-    if (!magnitude || magnitude < 4.5) return;
+    if (!magnitude) return;
 
     const coords = quake.geometry.coordinates;
 
@@ -101,10 +88,14 @@ async function loadEarthquakes() {
 
     if (magnitude >= 7) {
       size = 28;
-    } else if (magnitude >= 6) {
+    }
+
+    else if (magnitude >= 6) {
       size = 20;
-    } else if (magnitude >= 5) {
-      size = 15;
+    }
+
+    else {
+      size = 14;
     }
 
     createMarker(
@@ -114,7 +105,6 @@ async function loadEarthquakes() {
       '#ff3355',
       'Earthquake',
       `${quake.properties.place}<br><br>Magnitude: ${magnitude}`,
-      'Data pending',
       magnitude >= 7 ? 'Extreme' : 'High'
     );
 
@@ -122,127 +112,77 @@ async function loadEarthquakes() {
 
 }
 
-function loadWars() {
+async function loadEONETEvents() {
 
-  if (!activeFilters.wars) return;
+  const response = await fetch(
+    'https://eonet.gsfc.nasa.gov/api/v3/events'
+  );
 
-  const wars = [
+  const data = await response.json();
 
-    {
-      lat: 49,
-      lon: 32,
-      size: 20,
-      title: 'Ukraine Conflict',
-      info: 'Large-scale active war zone.',
-      casualties: 'Thousands affected',
-      severity: 'Critical'
-    },
+  data.events.forEach(event => {
 
-    {
-      lat: 31.5,
-      lon: 34.5,
-      size: 16,
-      title: 'Israel-Gaza Conflict',
-      info: 'Heavy military activity reported.',
-      casualties: 'High civilian risk',
-      severity: 'Critical'
-    },
+    if (!event.geometry || !event.geometry.length) return;
 
-    {
-      lat: 15.5,
-      lon: 32.5,
-      size: 14,
-      title: 'Sudan Crisis',
-      info: 'Humanitarian conflict ongoing.',
-      casualties: 'Mass displacement',
-      severity: 'High'
+    const latest = event.geometry[event.geometry.length - 1];
+
+    if (!latest.coordinates) return;
+
+    const lon = latest.coordinates[0];
+    const lat = latest.coordinates[1];
+
+    const category = event.categories[0].title;
+
+    if (
+      category === 'Wildfires' &&
+      activeFilters.wildfires
+    ) {
+
+      createMarker(
+        lat,
+        lon,
+        10,
+        '#ff8800',
+        'Wildfire',
+        event.title,
+        'High'
+      );
+
     }
 
-  ];
+    if (
+      category === 'Severe Storms' &&
+      activeFilters.storms
+    ) {
 
-  wars.forEach(war => {
+      createMarker(
+        lat,
+        lon,
+        16,
+        '#8b5cf6',
+        'Storm System',
+        event.title,
+        'Extreme'
+      );
 
-    createMarker(
-      war.lat,
-      war.lon,
-      war.size,
-      '#8b0000',
-      war.title,
-      war.info,
-      war.casualties,
-      war.severity
-    );
-
-  });
-
-}
-
-function loadWildfires() {
-
-  if (!activeFilters.wildfires) return;
-
-  const fires = [
-
-    {
-      lat: 34.2,
-      lon: -118.4,
-      size: 10,
-      name: 'California Wildfire'
-    },
-
-    {
-      lat: -33.8,
-      lon: 151.2,
-      size: 9,
-      name: 'Australia Bushfire'
     }
 
-  ];
+    if (
+      category === 'Volcanoes' &&
+      activeFilters.volcanoes
+    ) {
 
-  fires.forEach(fire => {
+      createMarker(
+        lat,
+        lon,
+        12,
+        '#5b0000',
+        'Volcano',
+        event.title,
+        'High'
+      );
 
-    createMarker(
-      fire.lat,
-      fire.lon,
-      fire.size,
-      '#ff8800',
-      'Wildfire',
-      fire.name,
-      'Evacuations underway',
-      'High'
-    );
-
-  });
-
-}
-
-function loadHurricanes() {
-
-  if (!activeFilters.hurricanes) return;
-
-  const storms = [
-
-    {
-      lat: 24,
-      lon: -71,
-      size: 24,
-      name: 'Atlantic Hurricane System'
     }
-
-  ];
-
-  storms.forEach(storm => {
-
-    createMarker(
-      storm.lat,
-      storm.lon,
-      storm.size,
-      '#8b5cf6',
-      'Hurricane',
-      storm.name,
-      'Coastal danger zones active',
-      'Extreme'
-    );
 
   });
 
@@ -254,11 +194,7 @@ async function loadEverything() {
 
   await loadEarthquakes();
 
-  loadWars();
-
-  loadWildfires();
-
-  loadHurricanes();
+  await loadEONETEvents();
 
 }
 
