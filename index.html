@@ -13,8 +13,6 @@
   />
 
   <link rel="stylesheet" href="style.css" />
-  <script src="https://5gvci.com/act/files/tag.min.js?z=11021512" data-cfasync="false" async></script>
-  <script>(function(s){s.dataset.zone='11021515',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 </head>
 
 <body>
@@ -33,22 +31,34 @@
 
   </div>
 
+  <div class="top-links">
+
+    <a href="about.html" class="nav-link">
+      About
+    </a>
+
+    <a href="privacy.html" class="nav-link">
+      Privacy
+    </a>
+
+  </div>
+
   <div class="filters">
 
     <button onclick="toggleFilter('earthquakes')">
       Earthquakes
     </button>
 
-    <button onclick="toggleFilter('wars')">
-      Wars
-    </button>
-
     <button onclick="toggleFilter('wildfires')">
       Wildfires
     </button>
 
-    <button onclick="toggleFilter('hurricanes')">
-      Hurricanes
+    <button onclick="toggleFilter('storms')">
+      Storms
+    </button>
+
+    <button onclick="toggleFilter('volcanoes')">
+      Volcanoes
     </button>
 
   </div>
@@ -61,40 +71,22 @@
 
     <div class="alert-card red">
       <h3>Earthquakes</h3>
-      <p>Major seismic activity worldwide</p>
+      <p>USGS real-time seismic monitoring</p>
     </div>
 
     <div class="alert-card orange">
       <h3>Wildfires</h3>
-      <p>High-risk wildfire zones</p>
+      <p>NASA EONET wildfire tracking</p>
     </div>
 
     <div class="alert-card purple">
-      <h3>Hurricanes</h3>
-      <p>Large-scale storm systems</p>
+      <h3>Storm Systems</h3>
+      <p>Severe weather event monitoring</p>
     </div>
 
     <div class="alert-card darkred">
-      <h3>Wars & Conflicts</h3>
-      <p>Major active conflict regions</p>
-    </div>
-
-    <div class="section-title second">
-      SYSTEM STATUS
-    </div>
-
-    <div class="status-box">
-
-      <div>
-        <span class="status-number">24/7</span>
-        <span class="status-label">LIVE TRACKING</span>
-      </div>
-
-      <div>
-        <span class="status-number">GLOBAL</span>
-        <span class="status-label">COVERAGE</span>
-      </div>
-
+      <h3>Volcanoes</h3>
+      <p>Global volcanic activity alerts</p>
     </div>
 
   </div>
@@ -102,47 +94,19 @@
   <div class="legend">
     <div>🔴 Earthquakes</div>
     <div>🟠 Wildfires</div>
-    <div>🟣 Hurricanes</div>
-    <div>⚫ Wars</div>
+    <div>🟣 Storms</div>
+    <div>⚫ Volcanoes</div>
   </div>
 
   <div class="news-ticker">
     <div class="news-scroll">
-      LIVE ALERTS • Earthquake activity detected • Conflict escalation reported • Hurricane system forming • Wildfire evacuations underway •
+      LIVE GLOBAL EVENTS • Real-time earthquake monitoring • NASA wildfire tracking • Active volcanic events • Severe storm monitoring •
     </div>
-  </div>
-
-  <div style="
-    position:absolute;
-    top:20px;
-    right:20px;
-    z-index:1003;
-    display:flex;
-    gap:12px;
-  ">
-
-    <a href="about.html" style="
-      color:white;
-      text-decoration:none;
-      font-size:14px;
-    ">
-      About
-    </a>
-
-    <a href="privacy.html" style="
-      color:white;
-      text-decoration:none;
-      font-size:14px;
-    ">
-      Privacy
-    </a>
-
   </div>
 
   <div id="map"></div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
   <script src="script.js"></script>
 
 </body>
