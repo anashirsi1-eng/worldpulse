@@ -1,58 +1,45 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background: #0b0f19;
-  overflow: hidden;
-}
+const map = L.map('map', {
+  zoomControl: false
+}).setView([20, 0], 2);
 
-#map {
-  height: 100vh;
-  width: 100%;
-}
+L.tileLayer(
+  'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+  {
+    attribution: '&copy; OpenStreetMap &copy; CARTO'
+  }
+).addTo(map);
 
-.sidebar {
-  position: absolute;
-  z-index: 1000;
-  width: 300px;
-  height: 100vh;
-  background: rgba(10, 15, 30, 0.92);
-  backdrop-filter: blur(10px);
-  color: white;
-  padding: 20px;
-  box-sizing: border-box;
-  overflow-y: auto;
-}
+const alerts = [
+  {
+    title: "Tornado Warning",
+    location: "Nashville",
+    coords: [36.1627, -86.7816],
+    color: "red"
+  },
+  {
+    title: "Wildfire",
+    location: "California",
+    coords: [34.0522, -118.2437],
+    color: "orange"
+  },
+  {
+    title: "Earthquake",
+    location: "Japan",
+    coords: [35.6762, 139.6503],
+    color: "yellow"
+  }
+];
 
-.sidebar h1 {
-  margin-top: 0;
-  font-size: 32px;
-}
+alerts.forEach(alert => {
+  const marker = L.circleMarker(alert.coords, {
+    radius: 10,
+    color: alert.color,
+    fillColor: alert.color,
+    fillOpacity: 0.8
+  }).addTo(map);
 
-.sidebar p {
-  color: #9ca3af;
-}
-
-.alert-card {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px;
-  padding: 15px;
-  margin-top: 15px;
-  transition: 0.2s;
-}
-
-.alert-card:hover {
-  transform: scale(1.03);
-  background: rgba(255,255,255,0.08);
-}
-
-.alert-card h3 {
-  margin: 0;
-  font-size: 18px;
-}
-
-.alert-card p {
-  margin-top: 8px;
-  font-size: 14px;
-}
+  marker.bindPopup(`
+    <b>${alert.title}</b><br>
+    ${alert.location}
+  `);
+});
