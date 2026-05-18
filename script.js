@@ -9,17 +9,7 @@ L.tileLayer(
   }
 ).addTo(map);
 
-const quakeLayer = L.layerGroup().addTo(map);
-
-const redIcon = {
-  color: '#ff3355',
-  fillColor: '#ff3355',
-  fillOpacity: 0.75
-};
-
 async function loadEarthquakes() {
-
-  quakeLayer.clearLayers();
 
   const response = await fetch(
     'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson'
@@ -32,37 +22,37 @@ async function loadEarthquakes() {
     const coords = quake.geometry.coordinates;
 
     const magnitude = quake.properties.mag;
-    const place = quake.properties.place;
 
     if (!magnitude || magnitude < 2.5) return;
+
+    const place = quake.properties.place;
 
     const lat = coords[1];
     const lon = coords[0];
 
-    let size = 8;
+    let color = '#ff3355';
 
     if (magnitude >= 5) {
-      size = 18;
+      color = '#ff0000';
     } else if (magnitude >= 4) {
-      size = 14;
+      color = '#ff8800';
     }
 
     const marker = L.circleMarker([lat, lon], {
-      radius: size,
-      ...redIcon
-    });
+      radius: magnitude * 2,
+      color: color,
+      fillColor: color,
+      fillOpacity: 0.7
+    }).addTo(map);
 
     marker.bindPopup(`
-      <div style="min-width:180px">
-        <h3 style="margin-bottom:8px;color:#ff4d6d;">
-          Earthquake
-        </h3>
-
-        <p><b>Location:</b> ${place}</p>
-        <p><b>Magnitude:</b> ${magnitude}</p>
-      </div>
+      <b>Earthquake</b><br>
+      ${place}<br>
+      Magnitude: ${magnitude}
     `);
 
-    quakeLayer.addLayer(marker);
+  });
 
-setInterval(loadEarthquakes, 300000);
+}
+
+loadEarthquakes();
