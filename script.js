@@ -143,25 +143,28 @@ async function loadEONETEvents() {
     if (
       category === 'Wildfires' &&
       activeFilters.wildfires &&
-      wildfireCount < 35
-    ) {
+      wildfireCount < 15
+       ) {
 
-      wildfireCount++;
+  // random skip so it doesn't carpet bomb
+  if (Math.random() > 0.15) return;
 
-      createMarker(
-        lat,
-        lon,
-        5,
-        '#ff9800',
-        'Wildfire',
-        `
-        ${event.title}
-        <br><br>
-        Active wildfire zone detected
-        `,
-        'Moderate'
-      );
-    }
+  wildfireCount++;
+
+  createMarker(
+    lat,
+    lon,
+    4,
+    '#ff9800',
+    'Wildfire',
+    `
+    ${event.title}
+    <br><br>
+    Active wildfire zone detected
+    `,
+    'Moderate'
+  );
+}
 
     // STORMS
     if (
