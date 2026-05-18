@@ -9,37 +9,39 @@ L.tileLayer(
   }
 ).addTo(map);
 
-const alerts = [
-  {
-    title: "Tornado Warning",
-    location: "Nashville",
-    coords: [36.1627, -86.7816],
-    color: "red"
-  },
-  {
-    title: "Wildfire",
-    location: "California",
-    coords: [34.0522, -118.2437],
-    color: "orange"
-  },
-  {
-    title: "Earthquake",
-    location: "Japan",
-    coords: [35.6762, 139.6503],
-    color: "yellow"
-  }
-];
+async function loadEarthquakes() {
 
-alerts.forEach(alert => {
-  const marker = L.circleMarker(alert.coords, {
-    radius: 10,
-    color: alert.color,
-    fillColor: alert.color,
-    fillOpacity: 0.8
-  }).addTo(map);
+  const response = await fetch(
+    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson'
+  );
 
-  marker.bindPopup(`
-    <b>${alert.title}</b><br>
-    ${alert.location}
-  `);
-});
+  const data = await response.json();
+
+  data.features.forEach(quake => {
+
+    const coords = quake.geometry.coordinates;
+
+    const magnitude = quake.properties.mag;
+    const place = quake.properties.place;
+
+    const lat = coords[1];
+    const lon = coords[0];
+
+    const marker = L.circleMarker([lat, lon], {
+      radius: magnitude * 2,
+      color: 'red',
+      fillColor: 'red',
+      fillOpacity: 0.7
+    }).addTo(map);
+
+    marker.bindPopup(`
+      <b>Earthquake</b><br>
+      ${place}<br>
+      Magnitude: ${magnitude}
+    `);
+
+  });
+
+}
+
+loadEarthquakes();
