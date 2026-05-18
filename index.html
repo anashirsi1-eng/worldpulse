@@ -1,53 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LiveCrisisRadar</title>
+      Wildfires
+    </button>
 
-  <link rel="stylesheet" href="style.css"/>
+    <button onclick="toggleFilter('hurricanes')">
+      Hurricanes
+    </button>
 
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet/dist/leaflet.css"
-  />
-</head>
-<body>
-
-  <div class="topbar">
-    <div>
-      <h1>LIVE CRISIS RADAR</h1>
-      <p>Global Real-Time Disaster Tracking</p>
-    </div>
-
-    <div class="live-pill">
-      <span class="dot"></span>
-      LIVE
-    </div>
   </div>
 
   <div class="sidebar">
 
-    <div class="section-title">ACTIVE EVENTS</div>
+    <div class="section-title">
+      LIVE EVENTS
+    </div>
 
     <div class="alert-card red">
-      <h3>Earthquake Activity</h3>
-      <p>Live USGS earthquake feed</p>
+      <h3>Earthquakes</h3>
+      <p>Major seismic activity worldwide</p>
     </div>
 
     <div class="alert-card orange">
-      <h3>Wildfire Zones</h3>
-      <p>Satellite hotspot tracking</p>
+      <h3>Wildfires</h3>
+      <p>High-risk wildfire zones</p>
     </div>
 
-    <div class="alert-card blue">
-      <h3>Storm Systems</h3>
-      <p>Severe weather monitoring</p>
+    <div class="alert-card purple">
+      <h3>Hurricanes</h3>
+      <p>Large-scale storm systems</p>
     </div>
 
-    <div class="section-title second">SYSTEM STATUS</div>
+    <div class="alert-card darkred">
+      <h3>Wars & Conflicts</h3>
+      <p>Major active conflict regions</p>
+    </div>
+
+    <div class="section-title second">
+      SYSTEM STATUS
+    </div>
 
     <div class="status-box">
+
       <div>
         <span class="status-number">24/7</span>
         <span class="status-label">LIVE TRACKING</span>
@@ -57,6 +49,13 @@
         <span class="status-number">GLOBAL</span>
         <span class="status-label">COVERAGE</span>
       </div>
+
+    </div>
+
+    <div class="ad-box">
+      Ad Space
+      <br><br>
+      Google AdSense Later
     </div>
 
   </div>
@@ -67,4 +66,5 @@
   <script src="script.js"></script>
 
 </body>
+
 </html>
