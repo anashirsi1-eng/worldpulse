@@ -1,5 +1,6 @@
 const map = L.map('map', {
-  zoomControl: false
+  zoomControl: false,
+  worldCopyJump: true
 }).setView([20, 0], 2);
 
 L.tileLayer(
@@ -9,50 +10,226 @@ L.tileLayer(
   }
 ).addTo(map);
 
+const markers = L.layerGroup().addTo(map);
+
+const activeFilters = {
+  earthquakes: true,
+  wars: true,
+  wildfires: true,
+  hurricanes: true
+};
+
+function clearMarkers() {
+  markers.clearLayers();
+}
+
+function createMarker(lat, lon, size, color, title, info) {
+
+  const marker = L.circleMarker([lat, lon], {
+    radius: size,
+    color: color,
+    fillColor: color,
+    fillOpacity: 0.75,
+    weight: 2
+  });
+
+  marker.bindPopup(`
+    <div style="
+      min-width:200px;
+      color:white;
+      font-family:Arial;
+    ">
+      <h2 style="
+        margin-bottom:10px;
+        color:${color};
+      ">
+        ${title}
+      </h2>
+
+      <p>${info}</p>
+    </div>
+  `);
+
+  markers.addLayer(marker);
+}
+
 async function loadEarthquakes() {
 
+  if (!activeFilters.earthquakes) return;
+
   const response = await fetch(
-    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson'
+    'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_week.geojson'
   );
 
   const data = await response.json();
 
   data.features.forEach(quake => {
 
-    const coords = quake.geometry.coordinates;
-
     const magnitude = quake.properties.mag;
 
-    if (!magnitude || magnitude < 2.5) return;
+    if (!magnitude || magnitude < 4.5) return;
 
-    const place = quake.properties.place;
+    const coords = quake.geometry.coordinates;
 
     const lat = coords[1];
     const lon = coords[0];
 
-    let color = '#ff3355';
+    let size = 12;
 
-    if (magnitude >= 5) {
-      color = '#ff0000';
-    } else if (magnitude >= 4) {
-      color = '#ff8800';
+    if (magnitude >= 7) {
+      size = 32;
+    } else if (magnitude >= 6) {
+      size = 24;
+    } else if (magnitude >= 5) {
+      size = 18;
     }
 
-    const marker = L.circleMarker([lat, lon], {
-      radius: magnitude * 2,
-      color: color,
-      fillColor: color,
-      fillOpacity: 0.7
-    }).addTo(map);
-
-    marker.bindPopup(`
-      <b>Earthquake</b><br>
-      ${place}<br>
+    createMarker(
+      lat,
+      lon,
+      size,
+      '#ff3355',
+      'Earthquake',
+      `
+      ${quake.properties.place}<br><br>
       Magnitude: ${magnitude}
-    `);
+      `
+    );
 
   });
 
 }
 
-loadEarthquakes();
+function loadWars() {
+
+  if (!activeFilters.wars) return;
+
+  const wars = [
+    {
+      lat: 49.0,
+      lon: 32.0,
+      size: 34,
+      title: 'Ukraine Conflict',
+      info: 'Major active war zone with ongoing attacks.',
+    },
+
+    {
+      lat: 31.5,
+      lon: 34.5,
+      size: 28,
+      title: 'Israel-Gaza Conflict',
+      info: 'Heavy military activity and missile strikes.',
+    },
+
+    {
+      lat: 15.5,
+      lon: 32.5,
+      size: 24,
+      title: 'Sudan Crisis',
+      info: 'Civil conflict and humanitarian crisis.',
+    }
+  ];
+
+  wars.forEach(war => {
+
+    createMarker(
+      war.lat,
+      war.lon,
+      war.size,
+      '#8b0000',
+      war.title,
+      war.info
+    );
+
+  });
+
+}
+
+function loadWildfires() {
+
+  if (!activeFilters.wildfires) return;
+
+  const fires = [
+    {
+      lat: 34.2,
+      lon: -118.4,
+      size: 18,
+      name: 'California Wildfire'
+    },
+
+    {
+      lat: -33.8,
+      lon: 151.2,
+      size: 16,
+      name: 'Australia Bushfire'
+    }
+  ];
+
+  fires.forEach(fire => {
+
+    createMarker(
+      fire.lat,
+      fire.lon,
+      fire.size,
+      '#ff8800',
+      'Wildfire',
+      fire.name
+    );
+
+  });
+
+}
+
+function loadHurricanes() {
+
+  if (!activeFilters.hurricanes) return;
+
+  const storms = [
+    {
+      lat: 24,
+      lon: -71,
+      size: 42,
+      name: 'Atlantic Hurricane System'
+    }
+  ];
+
+  storms.forEach(storm => {
+
+    createMarker(
+      storm.lat,
+      storm.lon,
+      storm.size,
+      '#8b5cf6',
+      'Hurricane',
+      storm.name
+    );
+
+  });
+
+}
+
+async function loadEverything() {
+
+  clearMarkers();
+
+  await loadEarthquakes();
+
+  loadWars();
+
+  loadWildfires();
+
+  loadHurricanes();
+
+}
+
+loadEverything();
+
+setInterval(loadEverything, 300000);
+
+window.toggleFilter = function(type) {
+
+  activeFilters[type] = !activeFilters[type];
+
+  loadEverything();
+
+};
