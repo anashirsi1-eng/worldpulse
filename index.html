@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>WorldPulse</title>
+  <title>LiveCrisisRadar</title>
 
   <link rel="stylesheet" href="style.css"/>
 
@@ -14,24 +14,51 @@
 </head>
 <body>
 
+  <div class="topbar">
+    <div>
+      <h1>LIVE CRISIS RADAR</h1>
+      <p>Global Real-Time Disaster Tracking</p>
+    </div>
+
+    <div class="live-pill">
+      <span class="dot"></span>
+      LIVE
+    </div>
+  </div>
+
   <div class="sidebar">
-    <h1>🌍 WorldPulse</h1>
-    <p>Live Global Alerts</p>
 
-    <div class="alert-card">
-      <h3>🌪 Tornado Warning</h3>
-      <p>Nashville, TN</p>
+    <div class="section-title">ACTIVE EVENTS</div>
+
+    <div class="alert-card red">
+      <h3>Earthquake Activity</h3>
+      <p>Live USGS earthquake feed</p>
     </div>
 
-    <div class="alert-card">
-      <h3>🔥 Wildfire</h3>
-      <p>California</p>
+    <div class="alert-card orange">
+      <h3>Wildfire Zones</h3>
+      <p>Satellite hotspot tracking</p>
     </div>
 
-    <div class="alert-card">
-      <h3>🌎 Earthquake</h3>
-      <p>Japan</p>
+    <div class="alert-card blue">
+      <h3>Storm Systems</h3>
+      <p>Severe weather monitoring</p>
     </div>
+
+    <div class="section-title second">SYSTEM STATUS</div>
+
+    <div class="status-box">
+      <div>
+        <span class="status-number">24/7</span>
+        <span class="status-label">LIVE TRACKING</span>
+      </div>
+
+      <div>
+        <span class="status-number">GLOBAL</span>
+        <span class="status-label">COVERAGE</span>
+      </div>
+    </div>
+
   </div>
 
   <div id="map"></div>
