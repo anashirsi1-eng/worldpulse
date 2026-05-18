@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
   <title>LiveCrisisRadar</title>
 
   <link rel="stylesheet" href="style.css"/>
@@ -12,9 +14,11 @@
     href="https://unpkg.com/leaflet/dist/leaflet.css"
   />
 </head>
+
 <body>
 
   <div class="topbar">
+
     <div>
       <h1>LIVE CRISIS RADAR</h1>
       <p>Global Real-Time Disaster Tracking</p>
@@ -24,15 +28,38 @@
       <span class="dot"></span>
       LIVE
     </div>
+
+  </div>
+
+  <div class="filters">
+
+    <button onclick="toggleFilter('earthquakes')">
+      Earthquakes
+    </button>
+
+    <button onclick="toggleFilter('wars')">
+      Wars
+    </button>
+
+    <button onclick="toggleFilter('wildfires')">
+      Wildfires
+    </button>
+
+    <button onclick="toggleFilter('hurricanes')">
+      Hurricanes
+    </button>
+
   </div>
 
   <div class="sidebar">
 
-    <div class="section-title">ACTIVE EVENTS</div>
+    <div class="section-title">
+      ACTIVE EVENTS
+    </div>
 
     <div class="alert-card red">
       <h3>Earthquake Activity</h3>
-      <p>Live USGS earthquake feed</p>
+      <p>Live global seismic monitoring</p>
     </div>
 
     <div class="alert-card orange">
@@ -42,21 +69,35 @@
 
     <div class="alert-card blue">
       <h3>Storm Systems</h3>
-      <p>Severe weather monitoring</p>
+      <p>Major weather monitoring</p>
     </div>
 
-    <div class="section-title second">SYSTEM STATUS</div>
+    <div class="section-title second">
+      SYSTEM STATUS
+    </div>
 
     <div class="status-box">
+
       <div>
-        <span class="status-number">24/7</span>
-        <span class="status-label">LIVE TRACKING</span>
+        <span class="status-number">
+          24/7
+        </span>
+
+        <span class="status-label">
+          LIVE TRACKING
+        </span>
       </div>
 
       <div>
-        <span class="status-number">GLOBAL</span>
-        <span class="status-label">COVERAGE</span>
+        <span class="status-number">
+          GLOBAL
+        </span>
+
+        <span class="status-label">
+          COVERAGE
+        </span>
       </div>
+
     </div>
 
   </div>
@@ -64,7 +105,9 @@
   <div id="map"></div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
   <script src="script.js"></script>
 
 </body>
+
 </html>
