@@ -13,7 +13,6 @@ body {
 #map {
   width: 100%;
   height: 100vh;
-  z-index: 1;
 }
 
 .topbar {
@@ -33,9 +32,10 @@ body {
 
   padding: 18px 24px;
 
-  border-radius: 22px;
+  border-radius: 24px;
 
   background: rgba(5, 8, 15, 0.82);
+
   border: 1px solid rgba(255,255,255,0.08);
 
   backdrop-filter: blur(18px);
@@ -52,6 +52,28 @@ body {
 }
 
 .topbar p {
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+.live-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px 18px;
+
+  border-radius: 999px;
+
+  background: rgba(255,0,60,0.12);
+
+  border: 1px solid rgba(255,0,60,0.4);
+
+  color: #ff4d6d;
+  font-weight: bold;
+
+  box-shadow: 0 0 20px rgba(255,0,80,0.25);
+}
 
 .dot {
   width: 10px;
@@ -87,8 +109,10 @@ body {
 
 .filters {
   position: absolute;
+
   top: 120px;
   left: 50%;
+
   transform: translateX(-50%);
 
   z-index: 1002;
@@ -101,11 +125,13 @@ body {
   border-radius: 999px;
 
   background: rgba(10,12,20,0.45);
+
   backdrop-filter: blur(14px);
 }
 
 .filters button {
   background: rgba(255,255,255,0.05);
+
   border: 1px solid rgba(255,255,255,0.08);
 
   color: white;
@@ -122,6 +148,8 @@ body {
 }
 
 .filters button:hover {
+  transform: translateY(-2px);
+
   background: rgba(255,255,255,0.1);
 
   box-shadow: 0 0 20px rgba(255,255,255,0.08);
@@ -129,13 +157,11 @@ body {
 
 .sidebar {
   position: absolute;
+
   top: 180px;
   left: 20px;
 
   width: 320px;
-  max-height: calc(100vh - 210px);
-
-  overflow-y: auto;
 
   z-index: 1001;
 
@@ -144,6 +170,7 @@ body {
   border-radius: 24px;
 
   background: rgba(8,10,18,0.82);
+
   border: 1px solid rgba(255,255,255,0.08);
 
   backdrop-filter: blur(18px);
@@ -157,9 +184,12 @@ body {
 
 .section-title {
   color: #ff4d6d;
+
   font-size: 12px;
   font-weight: bold;
+
   letter-spacing: 2px;
+
   margin-bottom: 18px;
 }
 
@@ -180,6 +210,23 @@ body {
 }
 
 .alert-card:hover {
+  transform: scale(1.03);
+
+  box-shadow: 0 0 20px rgba(255,255,255,0.08);
+}
+
+.alert-card h3 {
+  margin-bottom: 6px;
+}
+
+.alert-card p {
+  color: #b8bec9;
+  font-size: 13px;
+}
+
+.red {
+  background: linear-gradient(
+    135deg,
     rgba(255,0,60,0.18),
     rgba(255,0,60,0.05)
   );
@@ -222,6 +269,7 @@ body {
   border-radius: 16px;
 
   background: rgba(255,255,255,0.04);
+
   border: 1px solid rgba(255,255,255,0.08);
 }
 
@@ -239,41 +287,11 @@ body {
   font-size: 11px;
 }
 
-.ad-box {
-
-.leaflet-popup-content-wrapper {
-  background: #0f172a;
-  color: white;
-  border-radius: 14px;
-}
-
-.leaflet-popup-tip {
-  background: #0f172a;
-}
-
-.leaflet-interactive {
-  filter: drop-shadow(0 0 12px rgba(255,255,255,0.18));
-  animation: markerPulse 2.2s infinite;
-}
-
-@keyframes markerPulse {
-  0% {
-    opacity: 0.75;
-  }
-
-  50% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0.75;
-  }
-}
-
 .legend {
   position: absolute;
-  bottom: 24px;
-  right: 24px;
+
+  bottom: 60px;
+  right: 20px;
 
   z-index: 1002;
 
@@ -282,6 +300,7 @@ body {
   border-radius: 18px;
 
   background: rgba(8,10,18,0.88);
+
   border: 1px solid rgba(255,255,255,0.08);
 
   color: white;
@@ -295,6 +314,7 @@ body {
 
 .news-ticker {
   position: absolute;
+
   bottom: 0;
   left: 0;
 
@@ -302,24 +322,25 @@ body {
 
   z-index: 1002;
 
-  background: rgba(0,0,0,0.75);
+  background: rgba(0,0,0,0.8);
 
   color: white;
 
-  padding: 10px;
-
   overflow: hidden;
 
-  white-space: nowrap;
+  padding: 10px;
 }
 
 .news-scroll {
   display: inline-block;
+
   padding-left: 100%;
-  animation: scrollNews 24s linear infinite;
+
+  animation: scrollNews 22s linear infinite;
 }
 
 @keyframes scrollNews {
+
   0% {
     transform: translateX(0%);
   }
@@ -327,4 +348,41 @@ body {
   100% {
     transform: translateX(-100%);
   }
+
+}
+
+.leaflet-popup-content-wrapper {
+  background: #0f172a;
+
+  color: white;
+
+  border-radius: 14px;
+}
+
+.leaflet-popup-tip {
+  background: #0f172a;
+}
+
+.leaflet-interactive {
+  filter: drop-shadow(
+    0 0 12px rgba(255,255,255,0.18)
+  );
+
+  animation: markerPulse 2.2s infinite;
+}
+
+@keyframes markerPulse {
+
+  0% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.7;
+  }
+
 }
