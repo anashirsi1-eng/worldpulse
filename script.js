@@ -12,7 +12,8 @@ L.tileLayer(
 
 const markers = L.layerGroup().addTo(map);
 
-const ticker = document.getElementById('ticker');
+const ticker =
+  document.getElementById('ticker');
 
 const eventCounter =
   document.getElementById('eventCount');
@@ -69,38 +70,46 @@ function createMarker(
         radius: size,
         color: color,
         fillColor: color,
-        fillOpacity: 0.6,
+        fillOpacity: 0.55,
         weight: 2
       }
     );
 
   marker.bindPopup(`
 
-    <div style="
-      min-width:240px;
-      color:white;
-      font-family:Arial;
+  <div style="
+    min-width:240px;
+    color:white;
+    font-family:Arial;
+    line-height:1.6;
+  ">
+
+    <h2 style="
+      color:${color};
+      margin-bottom:10px;
+      font-size:22px;
     ">
+      ${title}
+    </h2>
 
-      <h2 style="
-        color:${color};
-        margin-bottom:10px;
-      ">
-        ${title}
-      </h2>
-
-      <div style="
-        line-height:1.5;
-      ">
-        ${info}
-      </div>
-
-      <br>
-
-      <strong>Severity:</strong>
-      ${severity}
-
+    <div style="
+      font-size:15px;
+      color:rgba(255,255,255,0.9);
+    ">
+      ${info}
     </div>
+
+    <br>
+
+    <div style="
+      font-weight:bold;
+      color:white;
+    ">
+      Severity:
+      ${severity}
+    </div>
+
+  </div>
 
   `);
 
@@ -133,22 +142,22 @@ async function loadEarthquakes() {
       const coords =
         quake.geometry.coordinates;
 
-      const lat = coords[1];
-      const lon = coords[0];
+      const lat =
+        coords[1];
 
-      let size = 12;
+      const lon =
+        coords[0];
 
-      if (mag >= 7) {
-        size = 32;
-      }
+      let size = 10;
 
-      else if (mag >= 6) {
-        size = 24;
-      }
+      if (mag >= 7)
+        size = 30;
 
-      else if (mag >= 5) {
+      else if (mag >= 6)
+        size = 22;
+
+      else if (mag >= 5)
         size = 16;
-      }
 
       createMarker(
         lat,
@@ -157,7 +166,9 @@ async function loadEarthquakes() {
         '#ff3355',
         'Earthquake',
         `
-        ${quake.properties.place}
+        <strong>
+          ${quake.properties.place}
+        </strong>
 
         <br><br>
 
@@ -182,7 +193,10 @@ async function loadEarthquakes() {
 
   catch(err) {
 
-    console.log(err);
+    console.log(
+      'Earthquake API failed',
+      err
+    );
 
   }
 
@@ -227,10 +241,10 @@ async function loadEONET() {
       if (
         category === 'Wildfires' &&
         activeFilters.wildfires &&
-        wildfireCount < 18
+        wildfireCount < 20
       ) {
 
-        if (Math.random() > 0.18)
+        if (Math.random() > 0.15)
           return;
 
         wildfireCount++;
@@ -238,16 +252,18 @@ async function loadEONET() {
         createMarker(
           lat,
           lon,
-          4,
+          5,
           '#ff9800',
           'Wildfire',
           `
-          ${event.title}
+          <strong>
+            ${event.title}
+          </strong>
 
           <br><br>
 
           NASA EONET
-          active fire detection
+          wildfire detection
           `,
           'Moderate'
         );
@@ -263,11 +279,13 @@ async function loadEONET() {
         createMarker(
           lat,
           lon,
-          12,
+          14,
           '#9b6dff',
           'Storm System',
           `
-          ${event.title}
+          <strong>
+            ${event.title}
+          </strong>
 
           <br><br>
 
@@ -288,11 +306,13 @@ async function loadEONET() {
         createMarker(
           lat,
           lon,
-          10,
+          12,
           '#700000',
           'Volcanic Activity',
           `
-          ${event.title}
+          <strong>
+            ${event.title}
+          </strong>
 
           <br><br>
 
@@ -310,13 +330,16 @@ async function loadEONET() {
 
   catch(err) {
 
-    console.log(err);
+    console.log(
+      'NASA API failed',
+      err
+    );
 
   }
 
 }
 
-async function loadGDELTNews() {
+async function loadBreakingNews() {
 
   if (!activeFilters.news)
     return;
@@ -325,7 +348,7 @@ async function loadGDELTNews() {
 
     const response =
       await fetch(
-        'https://api.gdeltproject.org/api/v2/doc/doc?query=earthquake OR war OR wildfire OR hurricane OR explosion&mode=artlist&maxrecords=25&format=json'
+'https://api.gdeltproject.org/api/v2/doc/doc?query=earthquake%20OR%20war%20OR%20wildfire%20OR%20hurricane%20OR%20explosion&mode=artlist&maxrecords=20&format=json'
       );
 
     const data =
@@ -353,7 +376,7 @@ async function loadGDELTNews() {
       createMarker(
         lat,
         lon,
-        6,
+        7,
         '#00d4ff',
         'Breaking News',
         `
@@ -365,6 +388,13 @@ async function loadGDELTNews() {
 
         Source:
         ${article.domain}
+
+        <br><br>
+
+        <a href="${article.url}"
+           target="_blank">
+           Read Article
+        </a>
         `,
         'Breaking'
       );
@@ -373,7 +403,7 @@ async function loadGDELTNews() {
 
     updateTicker(
       headlines
-        .slice(0, 6)
+        .slice(0, 8)
         .join(' • ')
     );
 
@@ -381,7 +411,10 @@ async function loadGDELTNews() {
 
   catch(err) {
 
-    console.log(err);
+    console.log(
+      'GDELT API failed',
+      err
+    );
 
   }
 
@@ -395,7 +428,7 @@ async function loadEverything() {
 
   await loadEONET();
 
-  await loadGDELTNews();
+  await loadBreakingNews();
 
 }
 
