@@ -1,127 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Live Crisis Radar</title>
+
+  <link rel="stylesheet" href="style.css">
 
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet/dist/leaflet.css"
   />
 
-  <link rel="stylesheet" href="style.css" />
-</head>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
+</head>
 <body>
 
-  <div class="topbar">
+<div id="map"></div>
 
-    <div>
-      <h1>LIVE CRISIS RADAR</h1>
-      <p>Global Real-Time Crisis Intelligence</p>
-    </div>
+<div class="topbar">
 
-    <div class="live-pill">
-      <span class="dot"></span>
-      LIVE
-    </div>
-
+  <div>
+    <h1>LIVE CRISIS RADAR</h1>
+    <p>Global Real-Time Crisis Intelligence</p>
   </div>
 
-  <div class="top-links">
-
-    <a href="about.html" class="nav-link">
-      About
-    </a>
-
-    <a href="privacy.html" class="nav-link">
-      Privacy
-    </a>
-
+  <div class="live-pill">
+    <span></span>
+    LIVE
   </div>
 
-  <div class="filters">
-
-    <button onclick="toggleFilter('earthquakes')">
-      Earthquakes
-    </button>
-
-    <button onclick="toggleFilter('wildfires')">
-      Wildfires
-    </button>
-
-    <button onclick="toggleFilter('storms')">
-      Storms
-    </button>
-
-    <button onclick="toggleFilter('volcanoes')">
-      Volcanoes
-    </button>
-
-    <button onclick="toggleFilter('news')">
-      Breaking News
-    </button>
-
-  </div>
-
-  <div class="sidebar">
-
-    <div class="section-title">
-      LIVE EVENTS
-    </div>
-
-    <div class="alert-card red">
-      <h3>Earthquakes</h3>
-      <p>USGS real-time seismic monitoring</p>
-    </div>
-
-    <div class="alert-card orange">
-      <h3>Wildfires</h3>
-      <p>NASA EONET wildfire tracking</p>
-    </div>
-
-    <div class="alert-card purple">
-      <h3>Storm Systems</h3>
-      <p>Severe weather event monitoring</p>
-    </div>
-
-    <div class="alert-card darkred">
-      <h3>Volcanoes</h3>
-      <p>Global volcanic activity alerts</p>
-    </div>
-
-    <div class="alert-card news-card">
-      <h3>Breaking News</h3>
-      <p>Live global crisis headlines</p>
-    </div>
-
-  </div>
-
-  <div class="legend">
-    <div>🔴 Earthquakes</div>
-    <div>🟠 Wildfires</div>
-    <div>🟣 Storms</div>
-    <div>⚫ Volcanoes</div>
-    <div>
-  <span style="background:#00d4ff;"></span>
-  Breaking News
 </div>
+
+<div class="top-links">
+  <a href="about.html" class="nav-link">About</a>
+  <a href="privacy.html" class="nav-link">Privacy</a>
+</div>
+
+<div class="filters">
+
+  <button onclick="toggleFilter('earthquakes')">
+    Earthquakes
+  </button>
+
+  <button onclick="toggleFilter('wildfires')">
+    Wildfires
+  </button>
+
+  <button onclick="toggleFilter('storms')">
+    Storms
+  </button>
+
+  <button onclick="toggleFilter('volcanoes')">
+    Volcanoes
+  </button>
+
+  <button onclick="toggleFilter('news')">
+    Breaking News
+  </button>
+
+</div>
+
+<div class="sidebar">
+
+  <h2>LIVE EVENTS</h2>
+
+  <div class="alert-card earthquake-card">
+    <h3>Earthquakes</h3>
+    <p>USGS real-time seismic monitoring</p>
   </div>
 
-  <div class="news-ticker">
-    <div class="news-scroll">
-      LIVE GLOBAL EVENTS • Real-time earthquake monitoring • NASA wildfire tracking • Active volcanic events • Severe storm monitoring •
+  <div class="alert-card wildfire-card">
+    <h3>Wildfires</h3>
+    <p>NASA EONET wildfire tracking</p>
+  </div>
+
+  <div class="alert-card storm-card">
+    <h3>Storm Systems</h3>
+    <p>Severe weather monitoring</p>
+  </div>
+
+  <div class="alert-card volcano-card">
+    <h3>Volcanoes</h3>
+    <p>Global volcanic activity alerts</p>
+  </div>
+
+  <div class="alert-card news-card">
+    <h3>Breaking News</h3>
+    <p>Global conflict & disaster headlines</p>
+  </div>
+
+  <div class="stats-grid">
+
+    <div class="stat-box">
+      <h3 id="eventCount">0</h3>
+      <p>EVENTS</p>
     </div>
+
+    <div class="stat-box">
+      <h3>24/7</h3>
+      <p>LIVE</p>
+    </div>
+
   </div>
 
-  <div id="map"></div>
+</div>
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="script.js"></script>
+<div class="legend">
+
+  <div>
+    <span style="background:#ff3355;"></span>
+    Earthquakes
+  </div>
+
+  <div>
+    <span style="background:#ff9800;"></span>
+    Wildfires
+  </div>
+
+  <div>
+    <span style="background:#9b6dff;"></span>
+    Storms
+  </div>
+
+  <div>
+    <span style="background:#700000;"></span>
+    Volcanoes
+  </div>
+
+  <div>
+    <span style="background:#00d4ff;"></span>
+    Breaking News
+  </div>
+
+</div>
+
+<div class="ticker-wrap">
+  <div class="ticker" id="ticker">
+    LIVE ALERTS • Initializing crisis systems...
+  </div>
+</div>
+
+<script src="script.js"></script>
 
 </body>
-
 </html>
